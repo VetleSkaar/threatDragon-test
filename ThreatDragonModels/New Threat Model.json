@@ -1,0 +1,139 @@
+{
+  "summary": {
+    "title": "Risk Assessment Tool - DFD",
+    "owner": "TDT4237 Group",
+    "description": "DFD for Web-Based Risk Assessment Tool with STRIDE threats"
+  },
+  "detail": {
+    "diagrams": [
+      {
+        "diagramType": "DFD",
+        "diagramObjects": [
+          {
+            "id": "browser",
+            "name": "User Browser",
+            "type": "External",
+            "bounds": "100,100,100,60"
+          },
+          {
+            "id": "webapp",
+            "name": "Web Front-End",
+            "type": "Process",
+            "bounds": "250,100,140,80"
+          },
+          {
+            "id": "api",
+            "name": "Risk Assessment API",
+            "type": "Process",
+            "bounds": "450,100,180,80"
+          },
+          {
+            "id": "catalogue",
+            "name": "Catalogue Service",
+            "type": "Process",
+            "bounds": "450,250,160,80"
+          },
+          {
+            "id": "creds",
+            "name": "User Credentials DB",
+            "type": "Store",
+            "bounds": "650,80,160,60"
+          },
+          {
+            "id": "assessments",
+            "name": "Assessments DB",
+            "type": "Store",
+            "bounds": "650,160,160,60"
+          },
+          {
+            "id": "cataloguedb",
+            "name": "Catalogue DB",
+            "type": "Store",
+            "bounds": "650,260,160,60"
+          },
+          {
+            "id": "logger",
+            "name": "Audit Logger",
+            "type": "Process",
+            "bounds": "450,360,160,60"
+          },
+          {
+            "id": "admin",
+            "name": "Admin Console",
+            "type": "External",
+            "bounds": "100,300,100,60"
+          }
+        ],
+        "diagramFlows": [
+          { "source": "browser", "target": "webapp", "label": "Login / Interact" },
+          { "source": "webapp", "target": "api", "label": "Forward Requests" },
+          { "source": "api", "target": "creds", "label": "Check Credentials" },
+          { "source": "api", "target": "assessments", "label": "CRUD Assessments" },
+          { "source": "api", "target": "catalogue", "label": "Query Catalogue" },
+          { "source": "catalogue", "target": "cataloguedb", "label": "Read/Write Catalogue" },
+          { "source": "api", "target": "logger", "label": "Log Events" },
+          { "source": "admin", "target": "webapp", "label": "Admin Access" }
+        ],
+        "boundaries": [
+          {
+            "id": "webBoundary",
+            "name": "Web Application Boundary",
+            "bounds": "230,60,600,400"
+          }
+        ],
+        "threats": [
+          {
+            "title": "Session Hijacking via XSS",
+            "type": "Spoofing",
+            "target": "webapp"
+          },
+          {
+            "title": "Insecure Object Access (IDOR)",
+            "type": "Tampering",
+            "target": "api"
+          },
+          {
+            "title": "Weak Logging = Repudiation",
+            "type": "Repudiation",
+            "target": "logger"
+          },
+          {
+            "title": "Weak Hashing in Credentials DB",
+            "type": "Information Disclosure",
+            "target": "creds"
+          },
+          {
+            "title": "Login DoS Flood",
+            "type": "Denial of Service",
+            "target": "webapp"
+          },
+          {
+            "title": "SQL Injection on Assessments",
+            "type": "Elevation of Privilege",
+            "target": "assessments"
+          },
+          {
+            "title": "Unrestricted Catalogue Writes",
+            "type": "Tampering",
+            "target": "catalogue"
+          },
+          {
+            "title": "Unencrypted DB Traffic",
+            "type": "Information Disclosure",
+            "target": "assessments"
+          },
+          {
+            "title": "Log Deletion",
+            "type": "Repudiation",
+            "target": "logger"
+          },
+          {
+            "title": "Phishing Admin Console",
+            "type": "Spoofing",
+            "target": "admin"
+          }
+        ]
+      }
+    ]
+  }
+}
